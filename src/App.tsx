@@ -1,0 +1,66 @@
+import * as React from "react";
+import { ClassUI, NavBar, NavbarRemain } from "classui";
+import { Card } from "classui/Components/Base/Card";
+import { Button } from "classui/Components";
+import { Login } from "./Details";
+import { createStore } from "redux";
+import { Switch, Route } from "react-router";
+import { GetID } from "./Getid";
+
+interface IAppState {
+	userid?: string;
+}
+export class App extends React.Component<any, IAppState> {
+	constructor(props: any) {
+		super(props);
+		this.state = {
+			userid: undefined
+		};
+	}
+	setID = (userid: any) => {
+		this.setState({
+			userid
+		});
+	};
+	render() {
+		return (
+			<ClassUI theme="green" fullHeight enableRouting>
+				<NavBar
+					dummy
+					fixed
+					width={1024}
+					style={{ height: 50 }}
+					logo="IIT"
+				>
+					<NavbarRemain />
+					<Button>Registration</Button>
+					<Button>Dashboard</Button>
+				</NavBar>
+				<div
+					style={{
+						minHeight: "calc(100vh - 50px)",
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center"
+					}}
+				>
+					<Card
+						style={{
+							padding: 20
+						}}
+					>
+						<Switch>
+							<Route
+								path="/details"
+								render={() => <Login id={this.state.userid} />}
+							/>
+							<Route
+								render={() => <GetID setID={this.setID} />}
+							/>
+						</Switch>
+					</Card>
+				</div>
+			</ClassUI>
+		);
+	}
+}
