@@ -41,7 +41,7 @@ app.get("*", (req, res) => {
 	res.sendFile(path.resolve("./index.html"));
 });
 
-let server = httpServer.listen(8080, () => {
+let server = httpServer.listen(80, () => {
 	let host = server.address();
 	console.log(`Server started : ${JSON.stringify(host)}`);
 });
