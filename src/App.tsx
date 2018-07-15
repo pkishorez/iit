@@ -50,10 +50,7 @@ export class App extends React.Component<any, IAppState> {
 						}}
 					>
 						<Switch>
-							<Route
-								path="/details"
-								render={() => <Login id={this.state.userid} />}
-							/>
+							<Route path="/details/:id" component={Login} />
 							<Route
 								render={() => <GetID setID={this.setID} />}
 							/>

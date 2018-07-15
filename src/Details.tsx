@@ -17,7 +17,15 @@ export class Login extends React.Component<ILoginProps, any> {
 			...data
 		}).then(alert);
 	};
+	constructor(props: any) {
+		super(props);
+		const id = props.match.params.id;
+		if (!id) {
+			ClassUI.history.push("/setID");
+		}
+	}
 	public render() {
+		const id = (this.props as any).match.params.id;
 		return (
 			<div>
 				<Form
@@ -41,13 +49,12 @@ export class Login extends React.Component<ILoginProps, any> {
 					}}
 				>
 					<Button
-						primary
 						style={{ fontSize: 12 }}
 						onClick={() => {
 							ClassUI.history.push("/setID");
 						}}
 					>
-						change {this.props.id}
+						change {id}
 					</Button>
 					<h3>IIT Form Data </h3>
 					<TextField name="name" label="Name" />
