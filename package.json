@@ -20,7 +20,7 @@
 		"@types/nodemailer": "^4.6.2",
 		"@types/serve-index": "^1.7.29",
 		"body-parser": "^1.18.3",
-		"classui": "0.0.97",
+		"classui": "0.0.101",
 		"es6-promise": "^4.2.4",
 		"express": "^4.16.3",
 		"jquery": "^3.3.1",

@@ -10,14 +10,17 @@ export function uploadImage(files: any, name: string) {
 			formData.append("userPhoto", value);
 		});
 		$.ajax({
-			url: `api/photo`,
+			url: `/api/photo`,
 			type: "POST",
 			data: formData,
 			error: (xhr: any) => {
 				reject("Error uploading image");
 			},
 			success: (response: any) => {
-				resolve("Image uploaded.");
+				resolve({
+					msg: "Image uploaded.",
+					data: response.data
+				});
 			},
 			cache: false,
 			contentType: false,
@@ -29,6 +32,7 @@ export function uploadImage(files: any, name: string) {
 interface IProps {
 	filename: string;
 	label?: string;
+	onChange: (img: string) => void;
 }
 interface IState {
 	message: string;
@@ -45,13 +49,17 @@ export class Image extends React.Component<IProps, IState> {
 		this.ref = r;
 	};
 	submit = (e: React.ChangeEvent<HTMLInputElement>) => {
-		uploadImage(e.target.files, this.props.filename).then(
-			(message: any) => {
+		this.setState({
+			message: "Uploading..."
+		});
+		uploadImage(e.target.files, this.props.filename)
+			.then((d: any) => {
 				this.setState({
-					message
+					message: d.msg
 				});
-			}
-		);
+				this.props.onChange(d.data);
+			})
+			.catch(msg => this.setState({ message: msg }));
 	};
 	render() {
 		return (

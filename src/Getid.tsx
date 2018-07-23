@@ -24,7 +24,7 @@ export const GetID = (props: any) => {
 		>
 			<h3>Registration ID</h3>
 			<TextField name="id" label="Enter ID" />
-			<Submit />
+			<Submit value="Submit" />
 		</Form>
 	);
 };
