@@ -8,6 +8,8 @@ import { Switch, Route } from "react-router";
 import { GetID } from "./Getid";
 import ShowDetails from "./Show";
 import { Dashboard } from "./Dashboard";
+import { Home } from "./Home";
+import { Eligibility } from "./Eligibility";
 
 interface IAppState {
 	userid?: string;
@@ -35,12 +37,20 @@ export class App extends React.Component<any, IAppState> {
 					logo="INYAS"
 				>
 					<NavbarRemain />
+					<Button onClick={() => ClassUI.history.push("/home")}>
+						Home
+					</Button>
+					<Button
+						onClick={() => ClassUI.history.push("/eligibility")}
+					>
+						Eligibility
+					</Button>
 					<Button onClick={() => ClassUI.history.push("/setID")}>
 						Registration
 					</Button>
-					<Button onClick={() => ClassUI.history.push("/dashboard")}>
+					{/* <Button onClick={() => ClassUI.history.push("/dashboard")}>
 						Dashboard
-					</Button>
+					</Button> */}
 				</NavBar>
 				<div
 					style={{
@@ -56,31 +66,27 @@ export class App extends React.Component<any, IAppState> {
 
 						<Route
 							render={() => (
-								<Card
-									style={{
-										padding: 20
-									}}
-								>
-									<Switch>
-										<Route
-											path="/details/:id"
-											component={Login}
-										/>
-										<Route
-											path="/details"
-											component={Login}
-										/>
-										<Route
-											path="/showDetails/:id"
-											component={ShowDetails}
-										/>
-										<Route
-											render={() => (
-												<GetID setID={this.setID} />
-											)}
-										/>
-									</Switch>
-								</Card>
+								<Switch>
+									<Route path="/home" component={Home} />
+									<Route
+										path="/eligibility"
+										component={Eligibility}
+									/>
+									<Route
+										path="/details/:id"
+										component={Login}
+									/>
+									<Route path="/details" component={Login} />
+									<Route
+										path="/showDetails/:id"
+										component={ShowDetails}
+									/>
+									<Route
+										render={() => (
+											<GetID setID={this.setID} />
+										)}
+									/>
+								</Switch>
 							)}
 						/>
 					</Switch>

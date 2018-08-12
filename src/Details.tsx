@@ -78,14 +78,19 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 		// render
 		const id = (this.props as any).match.params.id;
 		return (
-			<div
+			<Card
 				style={{
-					maxWidth: 700
+					padding: 20
 				}}
 			>
-				{this.state.data ? (
-					<>
-						{/* <Button
+				<div
+					style={{
+						maxWidth: 700
+					}}
+				>
+					{this.state.data ? (
+						<>
+							{/* <Button
 							style={{ fontSize: 12, marginBottom: 10 }}
 							onClick={() => {
 								ClassUI.history.push("/setID");
@@ -100,182 +105,184 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 								Change ID : {id}
 							</h4>
 						</Button> */}
-						<Form
-							onSubmit={this.onSubmit}
-							onError={err => {
-								Overlay.feedback(err, "error");
-							}}
-							default={this.state.data}
-							schema={{
-								...Details,
-								properties: {
-									...Details.properties,
-									agree: {
-										const: true
+							<Form
+								onSubmit={this.onSubmit}
+								onError={err => {
+									Overlay.feedback(err, "error");
+								}}
+								default={this.state.data}
+								schema={{
+									...Details,
+									properties: {
+										...Details.properties,
+										agree: {
+											const: true
+										}
 									}
-								}
-							}}
-						>
-							<h2>Basic Details </h2>
-							<TextField label="Name" name="name" />
-							<TextField label="Affiliation" name="affiliation" />
-							<TextField label="Designation" name="designation" />
-							<TextField
-								label="Date Of Birth : (dd/mm/yyyy)"
-								name="dob"
-							/>
-							<div style={{ marginBottom: 10 }}>
-								<b>Gender</b>
-								<Radio
-									inline
-									name="gender"
-									values={[
-										{ label: "male", value: "male" },
-										{ label: "female", value: "female" }
+								}}
+							>
+								<h2>Basic Details </h2>
+								<TextField label="Name" name="name" />
+								<TextField
+									label="Affiliation"
+									name="affiliation"
+								/>
+								<TextField
+									label="Designation"
+									name="designation"
+								/>
+								<TextField
+									label="Date Of Birth : (dd/mm/yyyy)"
+									name="dob"
+								/>
+								<div style={{ marginBottom: 10 }}>
+									<b>Gender</b>
+									<Radio
+										inline
+										name="gender"
+										values={[
+											{ label: "male", value: "male" },
+											{ label: "female", value: "female" }
+										]}
+									/>
+								</div>
+								<TextField
+									label="Mobile Number (10 digits)"
+									name="mobile_number"
+								/>
+								<TextField
+									label="Primary Email ID"
+									name="email"
+								/>
+								<TextField
+									name="postal_address"
+									type="area"
+									style={{
+										height: 50
+									}}
+									label="Postal Address"
+								/>
+								<TextField
+									name="employment_records"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="Employment Records"
+								/>
+								<TextField
+									name="education_qualification"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="Education Qualification"
+								/>
+								<TextField
+									name="area_of_research"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="Areas of research (Use Maximum five keywords): *"
+								/>
+								<TextField
+									name="research_experience"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="Research Experience and Accomplishments* (Maximum 250 words)"
+								/>{" "}
+								<TextField
+									name="best_research_papers"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="Two Best Research Papers Summary (100 words each) explaining the impact of your research for common public:*"
+								/>
+								<b>Broad area of research.</b>
+								<Select
+									name="broad_area_of_research"
+									label="Broad area of research."
+									nonEditable
+									options={[
+										"Physical Sciences",
+										"chemical Sciences",
+										"Biological Sciences",
+										"Engineering Sciences",
+										"Medical Sciences",
+										"Earth & Atmospheric Sciences",
+										"Mathematical Science"
 									]}
 								/>
-							</div>
-							<TextField
-								label="Mobile Number (10 digits)"
-								name="mobile_number"
-							/>
-							<TextField label="Primary Email ID" name="email" />
-							<TextField
-								name="postal_address"
-								type="area"
-								style={{
-									height: 50
-								}}
-								label="Postal Address"
-							/>
-							<TextField
-								name="employment_records"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="Employment Records"
-							/>
-							<TextField
-								name="education_qualification"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="Education Qualification"
-							/>
-							<TextField
-								name="employment_qualification"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="Employment Qualification"
-							/>
-							<TextField
-								name="area_of_research"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="Areas of research (Use Maximum five keywords): *"
-							/>
-							<TextField
-								name="research_experience"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="Research Experience and Accomplishments* (Maximum 250 words)"
-							/>{" "}
-							<TextField
-								name="best_research_papers"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="Two Best Research Papers Summary (100 words each) explaining the impact of your research for common public:*"
-							/>
-							<b>Broad area of research.</b>
-							<Select
-								name="broad_area_of_research"
-								label="Broad area of research."
-								nonEditable
-								options={[
-									"Physical Sciences",
-									"chemical Sciences",
-									"Biological Sciences",
-									"Engineering Sciences",
-									"Medical Sciences",
-									"Earth & Atmospheric Sciences",
-									"Mathematical Science"
-								]}
-							/>
-							<h2>General Questions</h2>
-							<TextField
-								name="reason"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="1. Why do you want to join Indian National Young Academy of Sciences (INYAS)? *(50-100 words)"
-							/>
-							<TextField
-								name="contribution"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="2. Describe briefly about your contribution for advancement of Science in India?* (50-100 words)"
-							/>
-							<TextField
-								name="vision"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="3. Write your vision for improving the present status of Science/Research in your capacity?* (50-100 words)"
-							/>
-							<TextField
-								name="fulfil"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="4. Describe how you can fulfil your vision being a member of INYAS in next five years. *(50-100 words)"
-							/>
-							<TextField
-								name="other"
-								type="area"
-								style={{
-									height: 70
-								}}
-								label="5. Any other information which you think appropriate to support your application.* (Maximum 100 words)"
-							/>
-							<hr />
-							<h2>
-								Additional Information and Supporting Documents.
-							</h2>
-							<b>
-								1. Please upload your CV here (in PDF format
-								only) *(Maximum file size: 1 MB)
-							</b>
-							<Image
-								onChange={img => {
-									this.setState({
-										images: {
-											...this.state.images,
-											userPhoto: img
-										}
-									});
-								}}
-								filename="user_doc"
-							/>
-							<TextField
-								name="mail"
-								label="2. Name and details of two referee(s) to support your application (Please refer the guidelines)*:"
-							/>
-							{/*} <TextField
+								<h2>General Questions</h2>
+								<TextField
+									name="reason"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="1. Why do you want to join Indian National Young Academy of Sciences (INYAS)? *(50-100 words)"
+								/>
+								<TextField
+									name="contribution"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="2. Describe briefly about your contribution for advancement of Science in India?* (50-100 words)"
+								/>
+								<TextField
+									name="vision"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="3. Write your vision for improving the present status of Science/Research in your capacity?* (50-100 words)"
+								/>
+								<TextField
+									name="fulfil"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="4. Describe how you can fulfil your vision being a member of INYAS in next five years. *(50-100 words)"
+								/>
+								<TextField
+									name="other"
+									type="area"
+									style={{
+										height: 70
+									}}
+									label="5. Any other information which you think appropriate to support your application.* (Maximum 100 words)"
+								/>
+								<hr />
+								<h2>
+									Additional Information and Supporting
+									Documents.
+								</h2>
+								<b>
+									1. Please upload your CV here (in PDF format
+									only) *(Maximum file size: 1 MB)
+								</b>
+								<Image
+									onChange={img => {
+										this.setState({
+											images: {
+												...this.state.images,
+												userPhoto: img
+											}
+										});
+									}}
+									filename="user_doc"
+								/>
+								<TextField
+									name="mail"
+									label="2. Name and details of two referee(s) to support your application (Please refer the guidelines)*:"
+								/>
+								{/*} <TextField
 							// 	name="mail"
 							// 	label="5. Any other information which you think appropriate to support your application.* (Maximum 100 words)"
 							// />
@@ -290,21 +297,22 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 							// 	type="area"
 							// 	label="Address"
 							// />*/}
-							<Checkbox name="agree">
-								I declare to the best of my knowledge that the
-								information provided in this application form is
-								true. If any misleading or untrue information is
-								found at any stage, this will lead cancellation
-								of my application and my INYAS membership will
-								be revoked.
-							</Checkbox>
-							<Submit value="Submit" />
-						</Form>
-					</>
-				) : (
-					"Loading..."
-				)}
-			</div>
+								<Checkbox name="agree">
+									I declare to the best of my knowledge that
+									the information provided in this application
+									form is true. If any misleading or untrue
+									information is found at any stage, this will
+									lead cancellation of my application and my
+									INYAS membership will be revoked.
+								</Checkbox>
+								<Submit value="Submit" />
+							</Form>
+						</>
+					) : (
+						"Loading..."
+					)}
+				</div>
+			</Card>
 		);
 	}
 }

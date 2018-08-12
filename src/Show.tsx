@@ -30,19 +30,25 @@ export default class ShowDetails extends React.Component<ShowProps, any> {
 	}
 	public render() {
 		return (
-			<div style={{ maxWidth: 500, width: "100%" }}>
-				<h3>{this.state.data ? "Details" : "Loading..."}</h3>
-				{Object.keys(this.state.data).map(k => {
-					if (_.isString(this.state.data[k])) {
-						return (
-							<div>
-								<b>{k}</b> : {this.state.data[k]}
-							</div>
-						);
-					}
-				})}
-				<h4>Email successfully sent to the referred email id.</h4>
-			</div>
+			<Card
+				style={{
+					padding: 20
+				}}
+			>
+				<div style={{ maxWidth: 500, width: "100%" }}>
+					<h3>{this.state.data ? "Details" : "Loading..."}</h3>
+					{Object.keys(this.state.data).map(k => {
+						if (_.isString(this.state.data[k])) {
+							return (
+								<div>
+									<b>{k}</b> : {this.state.data[k]}
+								</div>
+							);
+						}
+					})}
+					<h4>Email successfully sent to the referred email id.</h4>
+				</div>
+			</Card>
 		);
 	}
 }

@@ -26,7 +26,11 @@ export class Dashboard extends React.Component<ShowProps, any> {
 	}
 	public render() {
 		return (
-			<>
+			<Card
+				style={{
+					padding: 20
+				}}
+			>
 				{/* {JSON.stringify(this.state.data)} */}
 				{/* <h3>{this.state.data ? "Details" : "Loading..."}</h3> */}
 				<Anim
@@ -67,7 +71,7 @@ export class Dashboard extends React.Component<ShowProps, any> {
 						);
 					})}
 				</Anim>
-			</>
+			</Card>
 		);
 	}
 }
