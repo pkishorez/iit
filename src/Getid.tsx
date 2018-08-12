@@ -7,6 +7,11 @@ import { ClassUI } from "classui";
 export const GetID = (props: any) => {
 	return (
 		<Form
+			style={{
+				flexGrow: 1,
+				width: `calc(100vw)`,
+				maxWidth: 300
+			}}
 			autocomplete="off"
 			onSubmit={data => {
 				props.setID(data.id);

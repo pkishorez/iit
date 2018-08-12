@@ -32,7 +32,7 @@ export class App extends React.Component<any, IAppState> {
 					fixed
 					width={1024}
 					style={{ height: 50 }}
-					logo="IIT"
+					logo="INYAS"
 				>
 					<NavbarRemain />
 					<Button onClick={() => ClassUI.history.push("/setID")}>
