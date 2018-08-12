@@ -5,19 +5,17 @@ const gmail = nm.createTransport({
 	host: "smtp.gmail.com",
 	port: 465,
 	auth: {
-		user: "kishore.iiitn@gmail.com",
-		pass: "Iaagb.123"
+		user: "iit.inyas@gmail.com",
+		pass: "rgukt123"
 	}
 });
 export function sendMail({ to, msg, subject }: any) {
-	gmail
+	return gmail
 		.sendMail({
 			from: "kishore.iiitn@gmail.com",
 			to,
 			subject: subject || "IIT Mail",
-			text: msg,
-			html: "<h1>rich text</h1>"
+			html: `<h1>${msg}</h1>`
 		})
-		.then(() => console.log("Sent"))
-		.catch(e => console.error(e.message));
+		.catch(e => e.message);
 }

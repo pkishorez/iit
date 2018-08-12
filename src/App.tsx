@@ -47,7 +47,8 @@ export class App extends React.Component<any, IAppState> {
 						minHeight: "calc(100vh - 50px)",
 						display: "flex",
 						alignItems: "center",
-						justifyContent: "center"
+						justifyContent: "center",
+						margin: "20px 20px 0px 20px"
 					}}
 				>
 					<Switch>
@@ -63,6 +64,10 @@ export class App extends React.Component<any, IAppState> {
 									<Switch>
 										<Route
 											path="/details/:id"
+											component={Login}
+										/>
+										<Route
+											path="/details"
 											component={Login}
 										/>
 										<Route

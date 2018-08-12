@@ -36,13 +36,15 @@ interface IProps {
 }
 interface IState {
 	message: string;
+	loading: boolean;
 }
 export class Image extends React.Component<IProps, IState> {
 	ref: any;
 	constructor(props: any) {
 		super(props);
 		this.state = {
-			message: ""
+			message: "",
+			loading: false
 		};
 	}
 	getRef = (r: any) => {
@@ -50,12 +52,13 @@ export class Image extends React.Component<IProps, IState> {
 	};
 	submit = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({
-			message: "Uploading..."
+			loading: true
 		});
 		uploadImage(e.target.files, this.props.filename)
 			.then((d: any) => {
 				this.setState({
-					message: d.msg
+					message: d.msg,
+					loading: false
 				});
 				this.props.onChange(d.data);
 			})
@@ -81,10 +84,10 @@ export class Image extends React.Component<IProps, IState> {
 				<input type="file" name={"userPhoto"} onChange={this.submit} />
 				<div
 					style={{
-						color: "green"
+						color: this.state.loading ? "red" : "green"
 					}}
 				>
-					{this.state.message}
+					{this.state.loading ? "Loading..." : this.state.message}
 				</div>
 			</div>
 		);

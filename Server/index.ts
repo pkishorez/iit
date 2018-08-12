@@ -7,6 +7,7 @@ import { Actions } from "./Database";
 import * as fs from "fs";
 import _ = require("lodash");
 import { sendMail } from "./mail";
+import { v4 } from "uuid";
 
 var storage = multer.diskStorage({
 	destination: function(req, file, callback) {
@@ -35,24 +36,39 @@ app.post("/api/photo", upload, (req, res) => {
 
 app.post("/api/submit", (req, res) => {
 	try {
-		console.log(JSON.stringify(req.body));
 		// Check for existence of file here.
 		const image = _.get(req.body, "images.userPhoto", undefined);
-		if (!fs.existsSync(image)) {
+		const id = v4().replace(/-/g, "");
+		req.body.id = _.get(req.body, "id", id);
+		if (
+			!(
+				(image && fs.existsSync(image)) ||
+				fs.existsSync(`./uploads/${req.body.id}_resume.pdf`)
+			)
+		) {
 			res.send({
-				error: "Image not found."
+				error: "Resume not found. Please upload."
 			});
 		} else {
-			fs.copyFileSync(image, `./uploads/${req.body.id}_userPhoto`);
+			fs.copyFileSync(image, `./uploads/${req.body.id}_resume.pdf`);
 			(Actions.update(req.body) as any)
 				.then(() => {
-					res.send({
-						data: "Successfully submited data."
-					});
-					sendMail({
-						to: req.body.mail,
-						subject: "Please review the work of so and so id here!"
-					});
+					if (id === req.body.id) {
+						sendMail({
+							to: req.body.mail,
+							subject:
+								"Please review the work of so and so id here!"
+						}).then(() => {
+							res.send({
+								data:
+									"Successfully submited data. Please find your registration id at the mail sent."
+							});
+						});
+					} else {
+						res.send({
+							data: "Details successfully updated!"
+						});
+					}
 				})
 				.catch((e: any) =>
 					res.send({
@@ -92,7 +108,7 @@ app.get("*", (req, res) => {
 	res.sendFile(path.resolve("./index.html"));
 });
 
-let server = httpServer.listen(80, () => {
+let server = httpServer.listen(8080, () => {
 	let host = server.address();
 	console.log(`Server started : ${JSON.stringify(host)}`);
 });

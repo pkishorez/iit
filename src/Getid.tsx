@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Form } from "classui/Components/Form/index";
-import { TextField } from "classui/Components";
+import { TextField, Button } from "classui/Components";
 import { Submit } from "classui/Components/Form/Submit";
 import { ClassUI } from "classui";
 
@@ -22,6 +22,9 @@ export const GetID = (props: any) => {
 				}
 			}}
 		>
+			<Button onClick={() => ClassUI.history.push("/details")}>
+				New Registration.
+			</Button>
 			<h3>Registration ID</h3>
 			<TextField name="id" label="Enter ID" />
 			<Submit value="Submit" />
