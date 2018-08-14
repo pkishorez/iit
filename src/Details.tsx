@@ -67,7 +67,10 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 		// }
 		let data = {};
 		try {
-			data = JSON.parse(localStorage.getItem("details") as string);
+			const details = localStorage.getItem("details");
+			if (details) {
+				data = JSON.parse(details);
+			}
 		} catch (e) {
 			data = {};
 		}
