@@ -18,7 +18,7 @@ export function uploadImage(files: any, name: string) {
 			},
 			success: (response: any) => {
 				resolve({
-					msg: "Image uploaded.",
+					msg: "Document uploaded.",
 					data: response.data
 				});
 			},

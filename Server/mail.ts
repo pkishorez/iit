@@ -12,10 +12,10 @@ const gmail = nm.createTransport({
 export function sendMail({ to, msg, subject }: any) {
 	return gmail
 		.sendMail({
-			from: "kishore.iiitn@gmail.com",
+			from: "iit.inyas@gmail.com",
 			to,
 			subject: subject || "IIT Mail",
-			html: `<h1>${msg}</h1>`
+			html: `${msg}`
 		})
 		.catch(e => e.message);
 }

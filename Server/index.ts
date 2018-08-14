@@ -8,6 +8,9 @@ import * as fs from "fs";
 import _ = require("lodash");
 import { sendMail } from "./mail";
 import { v4 } from "uuid";
+import { hashSync } from "bcrypt";
+import { Schema } from "classui/Components/Form/Schema";
+import { Details } from "../common/schema";
 
 var storage = multer.diskStorage({
 	destination: function(req, file, callback) {
@@ -17,7 +20,12 @@ var storage = multer.diskStorage({
 		callback(null, file.fieldname + "-" + Date.now());
 	}
 });
-var upload = multer({ storage: storage }).single("userPhoto");
+var upload = multer({
+	storage: storage,
+	limits: {
+		fileSize: 1024 * 1024
+	}
+}).single("userPhoto");
 
 let app = express();
 
@@ -28,7 +36,6 @@ app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static("./"));
 
 app.post("/api/photo", upload, (req, res) => {
-	console.log("Uploading file...", JSON.stringify(req.file));
 	res.send({
 		data: req.file.path
 	});
@@ -37,46 +44,90 @@ app.post("/api/photo", upload, (req, res) => {
 app.post("/api/submit", (req, res) => {
 	try {
 		// Check for existence of file here.
-		const image = _.get(req.body, "images.userPhoto", undefined);
-		const id = v4().replace(/-/g, "");
-		req.body.id = _.get(req.body, "id", id);
-		if (
-			!(
-				(image && fs.existsSync(image)) ||
-				fs.existsSync(`./uploads/${req.body.id}_resume.pdf`)
-			)
-		) {
+		const data = { ...req.body };
+		const error = Schema.validate(Details, data);
+		if (error) {
 			res.send({
-				error: "Resume not found. Please upload."
+				error
 			});
-		} else {
-			fs.copyFileSync(image, `./uploads/${req.body.id}_resume.pdf`);
-			(Actions.update(req.body) as any)
-				.then(() => {
-					if (id === req.body.id) {
-						sendMail({
-							to: req.body.mail,
-							subject:
-								"Please review the work of so and so id here!"
-						}).then(() => {
-							res.send({
-								data:
-									"Successfully submited data. Please find your registration id at the mail sent."
-							});
-						});
-					} else {
-						res.send({
-							data: "Details successfully updated!"
-						});
-					}
-				})
-				.catch((e: any) =>
-					res.send({
-						error: e
-					})
-				);
+			return;
 		}
+		const image = _.get(req.body, "images.userPhoto", undefined);
+		Actions.get(req.body.id)
+			.then((d: any) => {
+				// Data found.
+				update(d, true);
+			})
+			.catch(() => {
+				update({}, false);
+			});
+
+		const update = (data: any, newone?: boolean) => {
+			if (
+				!(
+					(image && fs.existsSync(image)) ||
+					fs.existsSync(`./uploads/${data.mobile_number}.pdf`)
+				)
+			) {
+				res.send({
+					error: "Resume not found. Please upload."
+				});
+			} else {
+				if (image) {
+					fs.copyFileSync(
+						image,
+						`./uploads/${req.body.mobile_number}.pdf`
+					);
+				}
+				(Actions.update({
+					...req.body,
+					image
+				}) as any)
+					.then(() => {
+						// id===req.body.id means new one!
+						if (newone) {
+							sendMail({
+								to: req.body.id,
+								msg: `
+								Hello ${req.body.name},<br/>
+								<h4>INYAS Registration Successful.</h4>
+								You can access details at : http://www.inyasmembership.com/showDetails/${
+									req.body.id
+								}
+								<br/>
+								A separate mail will be sent to the referred email ids for comments.
+								`,
+								subject:
+									"INYAS : Details successfully registered!"
+							})
+								.then(() => {
+									res.send({
+										data: {
+											msg:
+												"Successfully submited data. Please find your registration id at the mail sent.",
+											id: req.body.id
+										}
+									});
+								})
+								.catch(() => {});
+						} else {
+							res.send({
+								data: {
+									msg: "Successfully updated data.",
+									id: req.body.id
+								}
+							});
+						}
+					})
+					.catch((e: any) =>
+						res.send({
+							error: e
+						})
+					);
+			}
+		};
 	} catch (e) {
+		console.log(e);
 		res.send({
 			error: e.message
 		});
@@ -84,7 +135,6 @@ app.post("/api/submit", (req, res) => {
 });
 app.get("/api/getDetails/:id", (req, res) => {
 	const id = req.params.id;
-	console.log(JSON.stringify(id));
 	res.setHeader("Content-Type", "application/json");
 	if (id === "all" || !id) {
 		Actions.getAll()

@@ -10,6 +10,7 @@ import { Details } from "../common/schema";
 import * as $ from "jquery";
 import _ = require("lodash");
 import { string } from "../node_modules/@types/prop-types";
+import { css } from "classui/Emotion";
 
 export interface ILoginProps {
 	id: any;
@@ -19,27 +20,42 @@ interface ILoginState {
 		userPhoto?: string;
 	};
 	data: any | undefined;
+	submitting: boolean;
 }
 
 export class Login extends React.Component<ILoginProps, ILoginState> {
 	onSubmit = (data: any) => {
+		// set data to localStorage.
+		if (this.state.submitting) {
+			return;
+		}
+		localStorage.setItem("details", JSON.stringify(data));
 		const id = (this.props as any).match.params.id;
+		this.setState({
+			submitting: true
+		});
 		$.post("/api/submit", {
-			id: (this.props as any).match.params.id,
+			id,
 			...data,
 			images: {
 				...this.state.images
 			}
 		})
 			.then(data => {
+				this.setState({
+					submitting: false
+				});
 				if (data.error) {
 					Overlay.feedback(data.error, "error");
 					return;
 				}
-				Overlay.feedback("Successfully updated data.", "success");
-				ClassUI.history.push(`/showDetails/${id}`);
+				Overlay.feedback(data.data.msg, "success");
+				ClassUI.history.push(`/showDetails/${data.data.id}`);
 			})
 			.catch(e => {
+				this.setState({
+					submitting: false
+				});
 				Overlay.feedback(e, "error");
 			});
 	};
@@ -49,9 +65,16 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 		// if (!id) {
 		// 	ClassUI.history.push("/setID");
 		// }
+		let data: any;
+		try {
+			data = JSON.parse(localStorage.getItem("details") as string);
+		} catch (e) {
+			data = {};
+		}
 		this.state = {
 			images: {},
-			data: !!id ? undefined : {}
+			submitting: false,
+			data: !!id ? undefined : data
 		};
 		if (id) {
 			$.getJSON(`/api/getDetails/${id}`)
@@ -76,7 +99,6 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 	}
 	public render() {
 		// render
-		const id = (this.props as any).match.params.id;
 		return (
 			<Card
 				style={{
@@ -150,10 +172,7 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 									label="Mobile Number (10 digits)"
 									name="mobile_number"
 								/>
-								<TextField
-									label="Primary Email ID"
-									name="email"
-								/>
+								<TextField label="Primary Email ID" name="id" />
 								<TextField
 									name="postal_address"
 									type="area"
@@ -194,14 +213,29 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 									}}
 									label="Research Experience and Accomplishments* (Maximum 250 words)"
 								/>{" "}
-								<TextField
-									name="best_research_papers"
-									type="area"
-									style={{
-										height: 70
-									}}
-									label="Two Best Research Papers Summary (100 words each) explaining the impact of your research for common public:*"
-								/>
+								<b>
+									Two Best Research Papers Summary (100 words
+									each) explaining the impact of your research
+									for common public:*
+								</b>
+								<div style={{ marginLeft: 20 }}>
+									<TextField
+										name="best_research_paper1"
+										type="area"
+										style={{
+											height: 70
+										}}
+										label="Research Paper 1"
+									/>
+									<TextField
+										name="best_research_paper2"
+										type="area"
+										style={{
+											height: 70
+										}}
+										label="Research Paper 2"
+									/>
+								</div>
 								<b>Broad area of research.</b>
 								<Select
 									name="broad_area_of_research"
@@ -278,25 +312,55 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 									}}
 									filename="user_doc"
 								/>
-								<TextField
-									name="mail"
-									label="2. Name and details of two referee(s) to support your application (Please refer the guidelines)*:"
-								/>
-								{/*} <TextField
-							// 	name="mail"
-							// 	label="5. Any other information which you think appropriate to support your application.* (Maximum 100 words)"
-							// />
-							// <Select
-							// 	nonEditable
-							// 	name="username"
-							// 	options={["kishore"]}
-							// 	label="Education Qualification"
-							// />
-							// <TextField
-							// 	name="username"
-							// 	type="area"
-							// 	label="Address"
-							// />*/}
+								<b>
+									2. Name and details of two referee(s) to
+									support your application (Please refer the
+									guidelines)*:
+								</b>
+								<div
+									style={{ marginLeft: 20, display: "flex" }}
+									className={css`
+										> * {
+											flex-basis: 250px;
+										}
+									`}
+								>
+									<div style={{ marginRight: 20 }}>
+										<TextField
+											style={{ marginRight: 20 }}
+											name="referer1_name"
+											label="Name - 1"
+										/>
+									</div>
+									<div>
+										<TextField
+											name="referer1_email"
+											label="Mailid - 1"
+										/>
+									</div>
+								</div>
+								<div
+									style={{ display: "flex", marginLeft: 20 }}
+									className={css`
+										> * {
+											flex-basis: 250px;
+										}
+									`}
+								>
+									<div style={{ marginRight: 20 }}>
+										<TextField
+											style={{ marginRight: 20 }}
+											name="referer2_name"
+											label="Name - 2"
+										/>
+									</div>
+									<div>
+										<TextField
+											name="referer2_email"
+											label="Mailid - 2"
+										/>
+									</div>
+								</div>
 								<Checkbox name="agree">
 									I declare to the best of my knowledge that
 									the information provided in this application
@@ -305,7 +369,10 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 									lead cancellation of my application and my
 									INYAS membership will be revoked.
 								</Checkbox>
-								<Submit value="Submit" />
+								<Submit
+									disabled={this.state.submitting}
+									value="Submit"
+								/>
 							</Form>
 						</>
 					) : (

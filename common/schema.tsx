@@ -25,7 +25,7 @@ export const Details: IJSONSchema = {
 			type: "string",
 			pattern: "^[0-9]{10}$"
 		},
-		email: {
+		id: {
 			type: "string",
 			format: "email"
 		},
@@ -43,7 +43,10 @@ export const Details: IJSONSchema = {
 		research_experience: {
 			type: "string"
 		},
-		best_research_papers: {
+		best_research_paper1: {
+			type: "string"
+		},
+		best_research_paper2: {
 			type: "string"
 		},
 		broad_area_of_research: {
@@ -72,26 +75,46 @@ export const Details: IJSONSchema = {
 		},
 		other: {
 			type: "string"
+		},
+		referer1_name: {
+			type: "string"
+		},
+		referer1_email: {
+			type: "string",
+			format: "email"
+		},
+		referer2_name: {
+			type: "string"
+		},
+		referer2_email: {
+			type: "string",
+			format: "email"
 		}
 	},
 	required: [
+		"id",
 		"name",
 		"affiliation",
 		"designation",
 		"dob",
 		"gender",
 		"mobile_number",
-		"email",
 		"employment_records",
 		"education_qualification",
 		"area_of_research",
 		"research_experience",
-		"best_research_papers",
+		"best_research_paper1",
+		"best_research_paper2",
 		"broad_area_of_research",
 		"contribution",
 		"reason",
 		"vision",
 		"fulfil",
-		"other"
+		"other",
+
+		"referer1_name",
+		"referer1_email",
+		"referer2_name",
+		"referer2_email"
 	]
 };

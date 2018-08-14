@@ -19,7 +19,7 @@ export const Home = (props: any) => {
 				style={{
 					// padding: 20,
 					margin: "0px 10px",
-					width: "100vw",
+					width: "calc(100vw - 20px)",
 					maxWidth: 1000
 				}}
 			>

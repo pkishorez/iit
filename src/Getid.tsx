@@ -27,7 +27,7 @@ export const GetID = (props: any) => {
 					properties: {
 						id: {
 							type: "string",
-							minLength: 5
+							format: "email"
 						}
 					}
 				}}
@@ -35,7 +35,7 @@ export const GetID = (props: any) => {
 				<Button onClick={() => ClassUI.history.push("/details")}>
 					New Registration.
 				</Button>
-				<h3>Registration ID</h3>
+				<h3>Registered Email ID</h3>
 				<TextField name="id" label="Enter ID" />
 				<Submit value="Submit" />
 			</Form>

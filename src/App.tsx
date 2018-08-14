@@ -32,7 +32,7 @@ export class App extends React.Component<any, IAppState> {
 					// logo="INYAS"
 				>
 					<img
-						src="bundle/img/logo_white.png"
+						src="/bundle/img/logo_white.png"
 						style={{ paddingLeft: 10 }}
 						height={35}
 					/>
