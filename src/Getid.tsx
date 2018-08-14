@@ -19,7 +19,7 @@ export const GetID = (props: any) => {
 				}}
 				autocomplete="off"
 				onSubmit={data => {
-					props.setID(data.id);
+					// props.setID(data.id);
 					ClassUI.history.push(`/details/${data.id}`);
 				}}
 				schema={{

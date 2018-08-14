@@ -2,4 +2,6 @@ node_modules
 package-lock.json
 uploads
 !uploads/Readme.md
-bundle
+bundle/index.js
+bundle/index.js.map
+.DS_Store

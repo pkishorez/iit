@@ -4,7 +4,7 @@ import { Card } from "classui/Components/Base/Card";
 import { Button } from "classui/Components";
 import { Login } from "./Details";
 import { createStore } from "redux";
-import { Switch, Route } from "react-router";
+import { Switch, Route, Redirect } from "react-router";
 import { GetID } from "./Getid";
 import ShowDetails from "./Show";
 import { Dashboard } from "./Dashboard";
@@ -21,11 +21,6 @@ export class App extends React.Component<any, IAppState> {
 			userid: undefined
 		};
 	}
-	setID = (userid: any) => {
-		this.setState({
-			userid
-		});
-	};
 	render() {
 		return (
 			<ClassUI theme="green" fullHeight enableRouting>
@@ -69,32 +64,16 @@ export class App extends React.Component<any, IAppState> {
 				>
 					<Switch>
 						<Route path="/dashboard" component={Dashboard} />
-
+						<Route path="/home" component={Home} />
+						<Route path="/eligibility" component={Eligibility} />
+						<Route path="/details/:id" component={Login} />
+						<Route path="/details" component={Login} />
 						<Route
-							render={() => (
-								<Switch>
-									<Route path="/home" component={Home} />
-									<Route
-										path="/eligibility"
-										component={Eligibility}
-									/>
-									<Route
-										path="/details/:id"
-										component={Login}
-									/>
-									<Route path="/details" component={Login} />
-									<Route
-										path="/showDetails/:id"
-										component={ShowDetails}
-									/>
-									<Route
-										render={() => (
-											<GetID setID={this.setID} />
-										)}
-									/>
-								</Switch>
-							)}
+							path="/showDetails/:id"
+							component={ShowDetails}
 						/>
+						<Route path="/setID" component={GetID} />
+						<Route render={() => <Redirect to="/home" />} />
 					</Switch>
 				</div>
 			</ClassUI>
