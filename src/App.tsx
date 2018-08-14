@@ -34,8 +34,14 @@ export class App extends React.Component<any, IAppState> {
 					fixed
 					width={1024}
 					style={{ height: 50 }}
-					logo="INYAS"
+					// logo="INYAS"
 				>
+					<img
+						src="bundle/img/logo_white.png"
+						style={{ paddingLeft: 10 }}
+						height={35}
+					/>
+
 					<NavbarRemain />
 					<Button onClick={() => ClassUI.history.push("/home")}>
 						Home
@@ -58,7 +64,7 @@ export class App extends React.Component<any, IAppState> {
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "center",
-						margin: "20px 20px 0px 20px"
+						margin: "0px 20px 0px 20px"
 					}}
 				>
 					<Switch>

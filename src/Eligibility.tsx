@@ -4,7 +4,13 @@ import { Card } from "../node_modules/classui/Components";
 export const Eligibility = (props: any) => {
 	return (
 		<div
-			style={{ width: "100vw", maxWidth: 1000, padding: 10, margin: 10 }}
+			style={{
+				width: "100vw",
+				maxWidth: 1000,
+				padding: 10,
+				margin: 10,
+				fontSize: 16
+			}}
 		>
 			<h2>Eligibility.</h2>
 			<div>
