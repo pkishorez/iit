@@ -65,7 +65,7 @@ export class Login extends React.Component<ILoginProps, ILoginState> {
 		// if (!id) {
 		// 	ClassUI.history.push("/setID");
 		// }
-		let data: any;
+		let data = {};
 		try {
 			data = JSON.parse(localStorage.getItem("details") as string);
 		} catch (e) {
