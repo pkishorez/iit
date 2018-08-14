@@ -1,38 +1,6 @@
 import { css } from "classui/Emotion";
 import React = require("react");
 
-var slideIndex = 1;
-
-// Next/previous controls
-function plusSlides(n: any) {
-	showSlides((slideIndex += n));
-}
-
-// Thumbnail image controls
-function currentSlide(n: any) {
-	showSlides((slideIndex = n));
-}
-
-function showSlides(n: any) {
-	var i;
-	var slides: any = document.getElementsByClassName("mySlides");
-	var dots = document.getElementsByClassName("dot");
-	if (n > slides.length) {
-		slideIndex = 1;
-	}
-	if (n < 1) {
-		slideIndex = slides.length;
-	}
-	for (i = 0; i < slides.length; i++) {
-		slides[i].style.display = "none";
-	}
-	for (i = 0; i < dots.length; i++) {
-		// dots[i].className = dots[i].className.replace(" active", "");
-	}
-	slides[slideIndex - 1].style.display = "block";
-	// dots[slideIndex - 1].className += " active";
-}
-
 const cls = css`
 	* {
 		box-sizing: border-box;
@@ -123,18 +91,9 @@ const cls = css`
 		animation-duration: 1.5s;
 	}
 
-	@-webkit-keyframes fade {
-		from {
-			opacity: 0.4;
-		}
-		to {
-			opacity: 1;
-		}
-	}
-
 	@keyframes fade {
 		from {
-			opacity: 0.4;
+			opacity: 0.1;
 		}
 		to {
 			opacity: 1;
@@ -147,30 +106,66 @@ interface IProps {
 		img: string;
 	}[];
 }
-export class Carousel extends React.Component<IProps> {
-	componentDidMount() {
-		showSlides(slideIndex);
+interface IState {
+	slideIndex: number;
+}
+export class Carousel extends React.Component<IProps, IState> {
+	// Next/previous controls
+	plusSlides(n: any) {
+		this.showSlides(this.state.slideIndex + n);
+	}
+
+	// Thumbnail image controls
+	currentSlide(n: any) {
+		this.showSlides(n);
+	}
+
+	showSlides(n: any) {
+		let slideIndex = n;
+		if (slideIndex >= this.props.slides.length) {
+			slideIndex = 0;
+		}
+		if (n < 0) {
+			slideIndex = this.props.slides.length - 1;
+		}
+		this.setState({
+			slideIndex
+		});
+	}
+	constructor(props: IProps) {
+		super(props);
+		this.state = {
+			slideIndex: 0
+		};
 	}
 	render() {
+		const slideIndex = this.state.slideIndex;
+		const { slides } = this.props;
 		return (
 			<div className={cls}>
 				{/* <!-- Slideshow container --> */}
 				<div className="slideshow-container">
 					{/* <!-- Full-width images with number and caption text --> */}
-					{this.props.slides.map((s, i) => (
-						<div key={i} className="mySlides fade">
+					{slides.map((s, i) => (
+						<div
+							key={i}
+							className="mySlides fade"
+							style={{
+								display: slideIndex === i ? "block" : "none"
+							}}
+						>
 							<div className="numbertext">
-								{i + 1} / {this.props.slides.length}
+								{i + 1} / {slides.length}
 							</div>
 							<img src={s.img} style={{ width: "100%" }} />
 							<div className="text">
-								{this.props.slides.map((s, i) => (
+								{slides.map((s, i) => (
 									<span
 										key={i}
 										className={`dot ${
-											slideIndex - 1 === i ? "active" : ""
+											slideIndex === i ? "active" : ""
 										}`}
-										onClick={() => currentSlide(i + 1)}
+										onClick={() => this.currentSlide(i)}
 									/>
 								))}
 							</div>
@@ -178,10 +173,10 @@ export class Carousel extends React.Component<IProps> {
 					))}
 
 					{/* <!-- Next and previous buttons --> */}
-					<a className={"prev"} onClick={() => plusSlides(-1)}>
+					<a className={"prev"} onClick={() => this.plusSlides(-1)}>
 						&#10094;
 					</a>
-					<a className="next" onClick={() => plusSlides(1)}>
+					<a className="next" onClick={() => this.plusSlides(1)}>
 						&#10095;
 					</a>
 				</div>
